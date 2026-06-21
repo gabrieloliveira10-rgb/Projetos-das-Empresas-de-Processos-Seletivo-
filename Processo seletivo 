@@ -1,3 +1,5 @@
+## Setup da tabela (Supabase)
+Tabela sugerida: `public.contacts`
 ```sql
 create table if not exists public.contacts (
   id bigserial primary key,
@@ -7,3 +9,5 @@ create table if not exists public.contacts (
   phone_3 text,
   created_at timestamptz not null default now()
 );
+
+Variáveis de ambiente (.env)
