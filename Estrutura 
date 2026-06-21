@@ -1,0 +1,8 @@
+b2bflow
+
+│
+├── .env.example       # Modelo das variáveis de ambiente (sem as suas senhas!)
+├── .gitignore         # Para NUNCA subir o arquivo .env real
+├── requirements.txt   # Bibliotecas que ele vai precisar instalar
+├── README.md          # Instruções de setup
+└── main.py            # O coração do seu código
