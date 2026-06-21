@@ -1,0 +1,61 @@
+main.py
+
+import os
+import logging
+from dotenv import load_dotenv
+from supabase_client import fetch_contacts
+from zapi_client import send_whatsapp_message
+load_dotenv()
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+MAX_NUMBERS = int(os.environ.get("MAX_NUMBERS", "3"))  # até 3 números
+def normalize_phone(phone: str) -> str | None:
+    if not phone:
+        return None
+    p = phone.strip()
+    return p if p else None
+def get_numbers_from_contact(contact: dict) -> list[str]:
+    numbers = []
+    for key in ["phone_1", "phone_2", "phone_3"]:
+        val = normalize_phone(contact.get(key))
+        if val:
+            numbers.append(val)
+    # até 3 números diferentes (na prática, escolhemos os que existem)
+    # Se você tiver repetidos, dedupe:
+    numbers = list(dict.fromkeys(numbers))
+    return numbers[:MAX_NUMBERS]
+def build_message(nome_contato: str) -> str:
+    # Mensagem EXATA do desafio
+    return f"Olá, {nome_contato} tudo bem com você?"
+def main():
+    logging.info("Iniciando leitura de contatos no Supabase...")
+    contacts = fetch_contacts()
+    if not contacts:
+        logging.info("Nenhum contato encontrado. Encerrando.")
+        return
+    sent = 0
+    errors = 0
+    for contact in contacts:
+        nome = (contact.get("nome_contato") or "").strip()
+        if not nome:
+            logging.warning("Contato sem nome. ID: %s", contact.get("id"))
+            continue
+        message = build_message(nome)
+        numbers = get_numbers_from_contact(contact)
+        if not numbers:
+            logging.warning("Contato sem números válidos. ID: %s", contact.get("id"))
+            continue
+        # Envia para até 3 números diferentes (ou 1)
+        for phone in numbers:
+            try:
+                logging.info("Enviando para %s | Nome: %s", phone, nome)
+                send_whatsapp_message(phone, message)
+                sent += 1
+            except Exception as e:
+                errors += 1
+                logging.exception("Falha ao enviar mensagem para %s. Erro: %s", phone, str(e))
+    logging.info("Finalizado. Mensagens enviadas=%s, erros=%s", sent, errors)
+if __name__ == "__main__":
+    main()
