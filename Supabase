@@ -1,0 +1,19 @@
+supabase_client.py
+
+import os
+from supabase import create_client
+def get_supabase():
+    url = os.environ["SUPABASE_URL"]
+    key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+    return create_client(url, key)
+def fetch_contacts():
+    """
+    Busca pessoas/contatos cadastrados.
+    Ajuste o nome da tabela se necessário.
+    """
+    supabase = get_supabase()
+    res = supabase.table("contacts").select(
+        "id, nome_contato, phone_1, phone_2, phone_3"
+    ).execute()
+    # res.data deve ser uma lista
+    return res.data or []
