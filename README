@@ -1,0 +1,31 @@
+
+O objetivo do projeto é ler contatos cadastrados em um banco de dados Supabase e disparar mensagens personalizadas via WhatsApp utilizando a Z-API.
+
+## 🚀 Tecnologias Utilizadas
+* **Python 3.x**
+* **Supabase** (Banco de dados PostgreSQL gerenciado)
+* **Z-API** (API de integração com WhatsApp)
+* **Python-dotenv** (Gerenciamento de variáveis de ambiente)
+* **Requests** (Envio de requisições HTTP)
+
+---
+
+## 📋 Pré-requisitos & Setup do Banco
+
+### 1. Supabase (Tabela de Contatos)
+No painel do seu Supabase, acesse o **SQL Editor** e execute o comando abaixo para criar a tabela e inserir alguns dados de teste:
+
+```sql
+-- Criação da tabela de contatos
+CREATE TABLE contatos (
+    id BIGSERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    nome TEXT NOT NULL,
+    telefone TEXT NOT NULL
+);
+
+-- Inserção de dados de teste (Substitua pelos números de teste válidos com DDD)
+INSERT INTO contatos (nome, telefone) VALUES 
+('Gabriel', '5561999999999'),
+('Ana', '5561988888888'),
+('Bandeira', '5511977777777');
