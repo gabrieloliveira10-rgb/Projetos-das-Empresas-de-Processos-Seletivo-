@@ -1,3 +1,4 @@
+Olá, <nome_contato> tudo bem com você?"
 ## Setup da tabela (Supabase)
 Tabela sugerida: `public.contacts`
 ```sql
@@ -9,5 +10,3 @@ create table if not exists public.contacts (
   phone_3 text,
   created_at timestamptz not null default now()
 );
-
-Variáveis de ambiente (.env)
